@@ -2,6 +2,8 @@ require 'replicon_scheduler_client/api'
 require 'json'
 require 'rest-client'
 
+#TODO: create client specs
+
 module RepliconSchedulerClient
   class APIResourceNotFound   < StandardError; end
   class APIServiceError       < StandardError; end

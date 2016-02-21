@@ -34,5 +34,17 @@ describe RepliconSchedulerClient::API do
       end
     end
 
+    context 'employee' do
+
+      it 'retrieves user details' do
+
+        employee_id = 1
+        allow(client).to receive(:get_json).with(client.api_url("employees/#{employee_id}")) { response }
+
+        ret = client.employee(employee_id)
+        expect(ret).to eql(response)
+      end
+    end
+
   end
 end
