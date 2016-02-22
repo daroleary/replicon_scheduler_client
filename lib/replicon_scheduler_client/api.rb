@@ -66,5 +66,16 @@ module RepliconSchedulerClient
       api_path = 'submit'
       get_json api_url(api_path)
     end
+
+    def employees_per_shift
+      fetch_shift_rule_value_for('EMPLOYEES_PER_SHIFT')
+    end
+
+    private
+
+    def fetch_shift_rule_value_for(key)
+      rule_definition = rule_definitions.find{|model| model.value == key}
+      shift_rules.find{|model| model.rule_id == rule_definition.id}.value
+    end
   end
 end

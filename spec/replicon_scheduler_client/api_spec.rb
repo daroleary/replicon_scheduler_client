@@ -5,12 +5,12 @@ describe RepliconSchedulerClient::API do
 
   let(:client) { create(:client) }
 
-  let(:api_host )     { 'api_host' }
+  let(:api_host) { 'api_host' }
 
   before { RepliconSchedulerClient.init({api_host: api_host}) }
 
   describe 'Client' do
-    let!(:client)  { RepliconSchedulerClient.create }
+    let!(:client) { RepliconSchedulerClient.create }
 
     context 'api_url' do
       it 'create the api url' do
@@ -22,12 +22,12 @@ describe RepliconSchedulerClient::API do
     end
 
     context '#employees' do
-      let(:employee) { FactoryGirl.build(:employee)}
+      let(:employee) { FactoryGirl.build(:employee) }
 
       it 'retrieves all employee details' do
 
-        employee_id_1   = 1
-        employee_id_2   = 2
+        employee_id_1 = 1
+        employee_id_2 = 2
         employee_name_1 = 'some.name'
         employee_name_2 = 'some.other.name'
         allow(client).to receive(:get_json).with(client.api_url('employees')) { [employee_json(employee_id_1, employee_name_1),
@@ -65,16 +65,16 @@ describe RepliconSchedulerClient::API do
 
       it 'retrieves all time-off requests' do
 
-        days_1 = [1,2,3]
+        days_1 = [1, 2, 3]
         week_1 = 23
         employee_id_1 = 1
 
-        days_2 = [1,2]
+        days_2 = [1, 2]
         week_2 = 24
         employee_id_2 = 2
 
         allow(client).to receive(:get_json).with(client.api_url('time-off/requests')) { [time_off_request_json(employee_id_1, week_1, days_1),
-                                                                                         time_off_request_json(employee_id_2, week_2, days_2)]}
+                                                                                         time_off_request_json(employee_id_2, week_2, days_2)] }
 
         actual = client.time_off_requests
 
@@ -178,7 +178,7 @@ describe RepliconSchedulerClient::API do
         value_2 = 4
 
         allow(client).to receive(:get_json).with(client.api_url('shift-rules')) { [shift_rule_json(rule_id_1, employee_id_1, value_1),
-                                                                                   shift_rule_json(rule_id_2, employee_id_2, value_2)]}
+                                                                                   shift_rule_json(rule_id_2, employee_id_2, value_2)] }
 
         actual = client.shift_rules
 
@@ -193,6 +193,18 @@ describe RepliconSchedulerClient::API do
         expect(shift_rules.rule_id).to eql(rule_id_2)
         expect(shift_rules.employee_id).to eql(employee_id_2)
         expect(shift_rules.value).to eql(value_2)
+      end
+    end
+
+    context 'get_employees_per_shift' do
+      it 'retrieves the employees per shift' do
+
+        allow(client).to receive(:get_json).with(client.api_url('rule-definitions')) { rule_definitions_json }
+        allow(client).to receive(:get_json).with(client.api_url('shift-rules')) { shift_rules_json }
+
+        actual = client.employees_per_shift
+
+        expect(actual).to eql(2)
       end
     end
   end
@@ -225,5 +237,21 @@ describe RepliconSchedulerClient::API do
   def week_json(id, start_date)
     {id: id,
      start_date: start_date}
+  end
+
+  def rule_definitions_json
+    [{'id': 4, 'value': 'MIN_SHIFTS', 'description': 'Minimum number of shifts an employee must work per week. If employee_id is included then this applies to that employee only.'},
+     {'id': 2, 'value': 'MAX_SHIFTS', 'description': 'Maximum number of shifts an employee may work per week. If employee_id is included then this applies to that employee only.'},
+     {'id': 7, 'value': 'EMPLOYEES_PER_SHIFT', 'description': 'Number of employees required per shift'}]
+  end
+
+  def shift_rules_json
+    [{'rule_id':4, 'employee_id':1, 'value':3},
+     {'rule_id':4, 'employee_id':2, 'value':5},
+     {'rule_id':2, 'employee_id':1, 'value':5},
+     {'rule_id':2, 'employee_id':2, 'value':5},
+     {'rule_id':2, 'value':6},
+     {'rule_id':4, 'value':2},
+     {'rule_id':7, 'value':2}]
   end
 end
