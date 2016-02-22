@@ -2,44 +2,61 @@ module RepliconSchedulerClient
   module API
 
     def employees_api_path
-      api_path = 'employees'
+      'employees'
     end
 
     def employees
-      get_json api_url(employees_api_path)
+      employees_json = get_json api_url(employees_api_path)
+      employees_json.map do |employee|
+        Employee.new(employee)
+      end
     end
 
     def employee(id)
       api_path = "#{employees_api_path}/#{id}"
-      get_json api_url(api_path)
+      employee_json = get_json api_url(api_path)
+      Employee.new employee_json
     end
 
     def time_off_requests
       api_path = 'time-off/requests'
-      get_json api_url(api_path)
+      time_off_requests_json = get_json api_url(api_path)
+      time_off_requests_json.map do |time_off_request|
+        TimeOffRequest.new(time_off_request)
+      end
     end
 
     def weeks_api_path
-      api_path = 'weeks'
+      'weeks'
     end
 
     def weeks
-      get_json api_url(weeks_api_path)
+      weeks_json = get_json api_url(weeks_api_path)
+      weeks_json.map do |week|
+        Week.new(week)
+      end
     end
 
     def week(week_number)
       api_path = "#{weeks_api_path}/#{week_number}"
-      get_json api_url(api_path)
+      week_json = get_json api_url(api_path)
+      Week.new week_json
     end
 
     def rule_definitions
       api_path = 'rule-definitions'
-      get_json api_url(api_path)
+      rule_definitions = get_json api_url(api_path)
+      rule_definitions.map do |rule_definition|
+        RuleDefinition.new(rule_definition)
+      end
     end
 
     def shift_rules
       api_path = 'shift-rules'
-      get_json api_url(api_path)
+      shift_rules_json = get_json api_url(api_path)
+      shift_rules_json.map do |shift_rule|
+        ShiftRule.new(shift_rule)
+      end
     end
 
     def submit(json,features={})
