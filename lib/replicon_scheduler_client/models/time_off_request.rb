@@ -3,7 +3,7 @@ class TimeOffRequest
 
   def initialize(options = {})
     @employee_id   = options[:employee_id]
-    @week = options[:week]
-    @days = options[:days]
+    @week          = options[:week]
+    @days          = options[:days]
   end
 end

@@ -1,9 +1,5 @@
 class Employee
-  # include ActiveModel::Validations
-  # include ActiveModel::Conversion
-  # extend ActiveModel::Naming
-
-  attr_accessor :id, :name
+  attr_reader :id, :name
 
   def initialize(options = {})
     @id   = options[:id]

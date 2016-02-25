@@ -2,7 +2,7 @@ class Week
   attr_reader :id, :start_date
 
   def initialize(options = {})
-    @id   = options[:id]
+    @id         = options[:id]
     @start_date = options[:start_date].to_date
   end
 end
