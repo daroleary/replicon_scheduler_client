@@ -1,6 +1,6 @@
 module RepliconSchedulerClient
+  # consumes replicons client api, converting them into models
   module API
-
     def employees_api_path
       'employees'
     end
@@ -59,7 +59,7 @@ module RepliconSchedulerClient
       end
     end
 
-    def submit(json,features={})
+    def submit(json, features = {})
       # TODO: Need to call post in client
       # Pass in JSON to post, so can post schedule(s)
 
@@ -74,8 +74,8 @@ module RepliconSchedulerClient
     private
 
     def fetch_shift_rule_value_for(key)
-      rule_definition = rule_definitions.find{|model| model.value == key}
-      shift_rules.find{|model| model.rule_id == rule_definition.id}.value
+      rule_definition = rule_definitions.find { |model| model.value == key }
+      shift_rules.find { |model| model.rule_id == rule_definition.id }.value
     end
   end
 end

@@ -9,15 +9,15 @@ Gem::Specification.new do |spec|
   spec.authors       = ['darren.oleary']
   spec.email         = ['darren.oleary@solium.com']
 
-  spec.summary       = %q{RepliconScheduler REST API Client}
-  spec.description   = %q{RepliconScheduler REST API Client}
+  spec.summary       = 'RepliconScheduler REST API Client'
+  spec.description   = 'RepliconScheduler REST API Client'
   # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata['allowed_push_host'] = 'https://github.com/daroleary/replicon_scheduler_client'
   else
     raise 'RubyGems 2.0 or newer is required to protect against public gem pushes.'
   end
@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'rails', '4.2.5'
-  spec.add_dependency 'rest-client',  '~> 1.8.0'
+  spec.add_dependency 'rest-client', '~> 1.8.0'
   spec.add_development_dependency 'bundler', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
