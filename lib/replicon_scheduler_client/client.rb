@@ -14,15 +14,12 @@ module RepliconSchedulerClient
     include RepliconSchedulerClient::API
 
     def execute(method, url, payload={})
-      args = @@config_args.merge method: method, url: url, payload: payload
-      response = RestClient::Request.execute args
-
+      RestClient::Request.execute @@config_args.merge method: method, url: url, payload: payload
     rescue RestClient::ResourceNotFound => exception        #404
       raise APIResourceNotFound, exception.http_body
     rescue RestClient::InternalServerError => exception     #500
       raise APIServiceError, exception.http_body
     end
-
 
     def get_json(url, payload={})
       response = execute(:get, url, payload)
