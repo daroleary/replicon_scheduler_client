@@ -10,6 +10,16 @@ RSpec.describe Employee, type: :model do
       expect(employee.name).to eql('some.name')
     end
   end
+
+  context '#==' do
+    it 'should perform equality by value' do
+      employee = Employee.new employee_json(123, 'some.name')
+      employee_two = Employee.new employee_json(123, 'some.name')
+
+      expect(employee).to eq(employee_two)
+      expect(employee.name).to_not eql(employee_two)
+    end
+  end
 end
 
 private
