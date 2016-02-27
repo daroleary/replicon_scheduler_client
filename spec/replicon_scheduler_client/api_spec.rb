@@ -207,6 +207,40 @@ describe RepliconSchedulerClient::API do
         expect(actual).to eql(2)
       end
     end
+
+    context '#submit' do
+      let(:params) { {name: 'some.name', email: 'email@test.com', features: [1,2]} }
+
+      it 'should successfully call submit api' do
+        allow(client).to receive(:execute).with(:post, client.api_url('submit'), params.merge(solution: false)) { {}.to_s }
+
+        client.submit params
+      end
+
+      context 'options validation' do
+        before(:each) { allow(client).to receive(:execute) {} }
+
+        it 'should validate name' do
+          expect { client.submit(params.merge(name: '   ')) }.to raise_error ArgumentError, 'invalid name: `   ` given'
+          expect { client.submit(params.merge(name: nil)) }.to raise_error ArgumentError, 'invalid name: `` given'
+          expect { client.submit(params.except(:name)) }.to raise_error ArgumentError, 'invalid name: `` given'
+          expect { client.submit(params.merge(name: 'some.other.name')) }.to_not raise_error ArgumentError
+        end
+
+        it 'should validate email' do
+          expect { client.submit(params.merge(email: '   ')) }.to raise_error ArgumentError, 'invalid email format: `   ` given'
+          expect { client.submit(params.merge(email: 'email@blah')) }.to raise_error ArgumentError, 'invalid email format: `email@blah` given'
+          expect { client.submit(params.merge(email: 'email@blah.com')) }.to_not raise_error ArgumentError
+        end
+
+        it 'should validate features' do
+          expect { client.submit(params.merge(features: 'abc')) }.to     raise_error ArgumentError, 'invalid features: `abc` given'
+          expect { client.submit(params.merge(features: [1,6])) }.to_not raise_error ArgumentError, 'invalid features: `1,6` given'
+          expect { client.submit(params.merge(features: 1)) }.to_not     raise_error ArgumentError
+          expect { client.submit(params.merge(features: [1,5])) }.to_not raise_error ArgumentError
+        end
+      end
+    end
   end
 
   private

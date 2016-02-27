@@ -1,4 +1,5 @@
 module RepliconSchedulerClient
+  EMAIL_REGEX = Regexp.compile(/^\w+@\w+\.(com|net|org|edu)$/i)
   # consumes replicons client api, converting them into models
   module API
     def employees_api_path
@@ -59,12 +60,21 @@ module RepliconSchedulerClient
       end
     end
 
-    def submit(json, features = {})
-      # TODO: Need to call post in client
-      # Pass in JSON to post, so can post schedule(s)
+    def submit(options={})
+      raise ArgumentError.new "invalid name: `#{options[:name]}` given"          unless (name     = extract_name(options))
+      raise ArgumentError.new "invalid email format: `#{options[:email]}` given" unless (email    = extract_email(options))
+      raise ArgumentError.new "invalid features: `#{options[:features]}` given"  unless (features = extract_features(options))
 
       api_path = 'submit'
-      get_json api_url(api_path)
+      payload  = {
+          name:     name,
+          email:    email,
+          features: features,
+          solution: extract_solution(options)
+      }
+
+      response = execute :post, api_url(api_path), payload
+      JSON.parse(response, symbolize_names: true)
     end
 
     def employees_per_shift
@@ -76,6 +86,27 @@ module RepliconSchedulerClient
     def fetch_shift_rule_value_for(key)
       rule_definition = rule_definitions.find { |model| model.value == key }
       shift_rules.find { |model| model.rule_id == rule_definition.id }.value
+    end
+
+    def extract_name(options)
+      name = options[:name]
+      name.blank? ? false : name
+    end
+
+    def extract_email(options)
+      email = options[:email]
+      EMAIL_REGEX.match(email) ? email : false
+    end
+
+    def extract_features(options)
+      features = options[:features]
+      features = [features] unless features.is_a? Array
+      (features.all? { |item| item.to_i.between?(1, 5) }) ? features : false
+    end
+
+    def extract_solution(options)
+      solution = options[:solution]
+      solution == true || solution == 'true'
     end
   end
 end
