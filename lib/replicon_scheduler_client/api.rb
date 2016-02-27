@@ -1,6 +1,6 @@
 module RepliconSchedulerClient
   EMAIL_REGEX = Regexp.compile(/^\w+@\w+\.(com|net|org|edu)$/i)
-  # consumes replicons client api, converting them into models
+  # consumes replicon's client api, converting them into models
   module API
     def employees_api_path
       'employees'

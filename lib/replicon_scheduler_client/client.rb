@@ -42,7 +42,7 @@ module RepliconSchedulerClient
           timeout:      90 # read timeout
       }
 
-      @@api_host                   = conf[:api_host].chomp("/")
+      @@api_host                   = conf[:api_host].chomp('/')
 
       @@config_args = {}
       @@config_args[:open_timeout] = conf[:open_timeout] || default_args[:open_timeout]
